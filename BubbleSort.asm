@@ -1,0 +1,30 @@
+MYDATA SEGMENT
+    STRING DB 5H,1H,7H,3H,11H
+   MYDATA ENDS
+
+MYCODE SEGMENT
+    ASSUME CS:MYCODE, DS:MYDATA
+    START:MOV AX,MYDATA
+    MOV DS,AX
+    
+    MOV CH,4
+    
+L1: MOV CL,4
+    LEA SI,STRING
+    
+L2: MOV AL,[SI]
+    MOV BL,[SI+1]
+    CMP AL,BL
+    JC DOWN
+    MOV DL,[SI+1]
+    XCHG DL,[SI]
+    MOV [SI+1],DL
+    
+DOWN: INC SI
+      DEC CL
+      JNZ L2
+      DEC CH
+      JNZ L1
+      
+MYCODE ENDS
+END START
